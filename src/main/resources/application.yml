@@ -24,10 +24,10 @@ eureka:
 
 spring:
   datasource:
-    driver-class-name: oracle.jdbc.OracleDriver
-    url: jdbc:oracle:thin:@172.16.8.160:1521:rtsngdev
-    username: artsdev
-    password: artsdev
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://artsdev.clpcb7xlzus1.us-east-1.rds.amazonaws.com/ARTSDEV
+    username: ARTSDEV
+    password: ARTSDEVGP
 
 logging:
   file: /usr/logging/schedule.log
