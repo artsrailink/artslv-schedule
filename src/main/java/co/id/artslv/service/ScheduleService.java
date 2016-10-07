@@ -35,13 +35,6 @@ public class ScheduleService {
         MessageWrapper<List<Schedule>> scheduleWrapper = new MessageWrapper<>("00","SUCCESS",schedules);
         return scheduleWrapper;
     }
-    @Transactional(rollbackFor = CustomException.class)
-    public String testGetFunction(String name){
-        SimpleJdbcCall simpleJdbcCall = new SimpleJdbcCall(jdbcTemplate);
-        simpleJdbcCall.withFunctionName("F_GEO_TEST");
-        simpleJdbcCall.declareParameters(new SqlParameter("na", OracleTypes.VARCHAR));
-        String result = simpleJdbcCall.executeFunction(String.class);
-        return result;
-    }
+
 
 }

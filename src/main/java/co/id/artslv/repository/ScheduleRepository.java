@@ -1,7 +1,6 @@
 package co.id.artslv.repository;
 
 import co.id.artslv.lib.schedule.Schedule;
-import co.id.artslv.lib.transactions.Transaction;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

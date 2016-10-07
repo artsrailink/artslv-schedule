@@ -35,8 +35,4 @@ public class ScheduleController {
 
     }
 
-    @RequestMapping(value = "/testkk")
-    public String testFunction(){
-        return scheduleService.testGetFunction("GEO");
-    }
 }
