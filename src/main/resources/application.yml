@@ -21,7 +21,12 @@ eureka:
 #    ip-address: 172.16.8.35                             # ip gitlab. Comment when want to test in local
 
 
-
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/ARTSDEV
+    username: ARTSDEV
+    password: ARTSDEVGP
 
 
 logging:
