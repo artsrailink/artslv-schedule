@@ -1,9 +1,11 @@
 package co.id.artslv.controller;
 
+import co.id.artslv.lib.inventory.Inventory;
 import co.id.artslv.lib.response.MessageWrapper;
 import co.id.artslv.lib.schedule.Schedule;
 import co.id.artslv.lib.utility.CustomErrorResponse;
 import co.id.artslv.lib.utility.CustomException;
+import co.id.artslv.repository.InventoryRepository;
 import co.id.artslv.service.ScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,6 +24,9 @@ public class ScheduleController {
     @Autowired
     private ScheduleService scheduleService;
 
+    @Autowired
+    private InventoryRepository inventoryRepository;
+
     @RequestMapping(value = "/getall")
     public ResponseEntity<?> getAllSchedules(){
         try {
@@ -34,5 +39,6 @@ public class ScheduleController {
         }
 
     }
+
 
 }
