@@ -1,19 +1,25 @@
 package co.id.artslv.service;
 
+import co.id.artslv.lib.allocation.Allocation;
 import co.id.artslv.lib.availability.Availability;
+import co.id.artslv.lib.availability.Availability$2;
 import co.id.artslv.lib.fare.Fare;
 import co.id.artslv.lib.inventory.Inventory;
 import co.id.artslv.lib.response.MessageWrapper;
+import co.id.artslv.lib.schedule.Schedule;
 import co.id.artslv.lib.stop.Stop;
-import co.id.artslv.repository.FareRepository;
-import co.id.artslv.repository.InventoryRepository;
-import co.id.artslv.repository.StopRepository;
+import co.id.artslv.lib.trip.Trip;
+import co.id.artslv.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Created by root on 11/10/16.
@@ -28,6 +34,78 @@ public class AvailabilityService {
 
     @Autowired
     private FareRepository fareRepository;
+
+    @Autowired
+    private ScheduleRepository scheduleRepository;
+
+    @Autowired
+    private TripRepository tripRepository;
+
+    @Autowired
+    private AllocationRepository allocationRepository;
+
+    public MessageWrapper<Availability$2> getAvailability(String reqid,LocalDate tripdate,String orgstasiun,String deststasiun){
+        List<Trip> trips = tripRepository.findByTripdate(tripdate);
+
+        Availability$2 availability$2 = new Availability$2();
+        availability$2.setOrgstasiun(orgstasiun);
+        availability$2.setDeststasiun(deststasiun);
+        availability$2.setTripdate(tripdate);
+
+
+        List<Schedule> schedules = trips.stream().map(trip -> scheduleRepository.findByNoka(trip.getSchedulenoka())).collect(Collectors.toList());
+        Map<String,String> unavailableNoka = new HashMap<>();
+        for(Schedule schedule: schedules){
+
+            String noka = schedule.getNoka();
+            Stop arivingStop = stopRepository.findByStatsiuncodeAndSchedulenoka(deststasiun,noka);
+            Stop departStop = stopRepository.findByStatsiuncodeAndSchedulenoka(orgstasiun,noka);
+
+            if(arivingStop==null || departStop==null){
+                unavailableNoka.put(noka,"NaN");
+                continue;
+            }
+
+            schedule.setDeparttime(departStop.getStopdeparture());
+            schedule.setArivingtime(arivingStop.getStoparrival());
+
+            int orgOrder = departStop.getStoporder();
+            int destOrder = arivingStop.getStoporder();
+
+            int orderBenchmark = orgOrder<destOrder?orgOrder:destOrder;
+            if(orgOrder>destOrder){
+                int temp = orgOrder;
+                orgOrder = destOrder;
+                destOrder = temp;
+            }
+
+            List<Inventory> benchmarkOriginInventory = inventoryRepository.findByBookstatAndTripdateAndSchedulenokaAndStoporder("0",tripdate,noka,orderBenchmark);
+            List<Inventory> occupiedSeatBetweenOrgNDest = inventoryRepository.findByBookstatAndTripdateAndSchedulenokaAndStoporderBetween("1",tripdate,noka,orgOrder,destOrder);
+
+            occupiedSeatBetweenOrgNDest.forEach(inventory -> {
+                benchmarkOriginInventory.removeIf(p->p.getWagondetid().equals(inventory.getWagondetid()) && p.getStamformdetcode().equals(inventory.getStamformdetcode()));
+
+            });
+
+            int availableseat = benchmarkOriginInventory.size();
+            schedule.setAvailableseat(availableseat);
+
+            List<Allocation> allocations = allocationRepository.findBySchedulenokaAndStoporderorgAndStoporderdesAndTripdate(noka,orgOrder,destOrder,tripdate);
+            allocations.forEach(allocation -> {
+                Fare fare = fareRepository.findByStatusAndCodeorgAndCodedesAndSubclasscode("1",allocation.getStasiuncodeorg(),allocation.getStasiuncodedes(),allocation.getSubclasscode());
+                allocation.setFare(fare);
+            });
+
+            schedule.setAllocations(allocations);
+        }
+
+        schedules.removeIf(schedule -> unavailableNoka.get(schedule.getNoka())!=null && unavailableNoka.get(schedule.getNoka()).equals("NaN"));
+
+        availability$2.setSchedules(schedules);
+        MessageWrapper<Availability$2> result = new MessageWrapper<>("00","SUCCESS",availability$2);
+        return result;
+
+    }
 
     public MessageWrapper<Object> getAvailability(LocalDate tripdate,String orgstasiun,String deststasiun){
 

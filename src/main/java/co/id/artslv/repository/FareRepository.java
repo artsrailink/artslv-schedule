@@ -11,4 +11,6 @@ import java.util.List;
  */
 public interface FareRepository extends JpaRepository<Fare,String>{
     List<Fare> findByStatusAndCodeorgAndCodedes(String status, String codeorg, String codedes);
+
+    Fare findByStatusAndCodeorgAndCodedesAndSubclasscode(String status, String codeorg, String codedes, String subclasscode);
 }

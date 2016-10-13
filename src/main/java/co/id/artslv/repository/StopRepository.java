@@ -10,4 +10,5 @@ import java.util.List;
  */
 public interface StopRepository extends JpaRepository<Stop,String>{
     List<Stop> findByStatsiuncode(String stasiuncode);
+    Stop findByStatsiuncodeAndSchedulenoka(String stasiuncode, String noka);
 }
