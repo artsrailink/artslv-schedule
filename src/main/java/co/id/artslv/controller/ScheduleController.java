@@ -1,7 +1,7 @@
 package co.id.artslv.controller;
 
-import co.id.artslv.lib.inventory.Inventory;
-import co.id.artslv.lib.response.MessageWrapper;
+
+import co.id.artslv.lib.responses.MessageWrapper;
 import co.id.artslv.lib.schedule.Schedule;
 import co.id.artslv.lib.utility.CustomErrorResponse;
 import co.id.artslv.lib.utility.CustomException;

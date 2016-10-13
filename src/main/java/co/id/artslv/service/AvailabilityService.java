@@ -1,14 +1,14 @@
 package co.id.artslv.service;
 
-import co.id.artslv.lib.allocation.Allocation;
 import co.id.artslv.lib.availability.Availability;
 import co.id.artslv.lib.availability.Availability$2;
-import co.id.artslv.lib.fare.Fare;
 import co.id.artslv.lib.inventory.Inventory;
-import co.id.artslv.lib.response.MessageWrapper;
+import co.id.artslv.lib.payments.Fare;
+import co.id.artslv.lib.responses.MessageWrapper;
+import co.id.artslv.lib.schedule.Allocation;
 import co.id.artslv.lib.schedule.Schedule;
-import co.id.artslv.lib.stop.Stop;
-import co.id.artslv.lib.trip.Trip;
+import co.id.artslv.lib.schedule.Stop;
+import co.id.artslv.lib.schedule.Trip;
 import co.id.artslv.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,7 +44,7 @@ public class AvailabilityService {
     @Autowired
     private AllocationRepository allocationRepository;
 
-    public MessageWrapper<Availability$2> getAvailability(String reqid,LocalDate tripdate,String orgstasiun,String deststasiun){
+    public MessageWrapper<Availability$2> getAvailability(String reqid, LocalDate tripdate, String orgstasiun, String deststasiun){
         List<Trip> trips = tripRepository.findByTripdate(tripdate);
 
         Availability$2 availability$2 = new Availability$2();

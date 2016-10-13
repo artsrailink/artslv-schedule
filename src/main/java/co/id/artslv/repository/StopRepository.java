@@ -1,6 +1,6 @@
 package co.id.artslv.repository;
 
-import co.id.artslv.lib.stop.Stop;
+import co.id.artslv.lib.schedule.Stop;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

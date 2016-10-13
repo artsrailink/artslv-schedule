@@ -1,9 +1,8 @@
 package co.id.artslv.repository;
 
-import co.id.artslv.lib.fare.Fare;
+import co.id.artslv.lib.payments.Fare;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.time.LocalDate;
 import java.util.List;
 
 /**

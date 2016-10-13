@@ -2,7 +2,7 @@ package co.id.artslv.controller;
 
 import co.id.artslv.lib.availability.Availability;
 import co.id.artslv.lib.availability.Availability$2;
-import co.id.artslv.lib.response.MessageWrapper;
+import co.id.artslv.lib.responses.MessageWrapper;
 import co.id.artslv.service.AvailabilityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,7 +34,7 @@ public class AvailabilityController {
         return new ResponseEntity<>(messageWrapper, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/getschedule/{reqid}/{origin}/{destination}/{tripdate}",method = RequestMethod.GET)
+    @RequestMapping(value = "/getschedule2/{reqid}/{origin}/{destination}/{tripdate}",method = RequestMethod.GET)
     public ResponseEntity<?> getSchedule(@PathVariable String reqid, @PathVariable String origin, @PathVariable String destination,
                                          @PathVariable String tripdate){
 

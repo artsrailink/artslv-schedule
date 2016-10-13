@@ -1,15 +1,12 @@
 package co.id.artslv.service;
 
-import co.id.artslv.lib.response.MessageWrapper;
+import co.id.artslv.lib.responses.MessageWrapper;
 import co.id.artslv.lib.schedule.Schedule;
 import co.id.artslv.lib.utility.CustomErrorResponse;
 import co.id.artslv.lib.utility.CustomException;
 import co.id.artslv.repository.ScheduleRepository;
-import oracle.jdbc.OracleTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.SqlParameter;
-import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
