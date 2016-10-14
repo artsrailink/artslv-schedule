@@ -33,18 +33,6 @@ public class ScheduleService {
     @Autowired
     private PropScheduleRepository propScheduleRepository;
 
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
-
-    @Transactional(rollbackFor = CustomException.class)
-    public MessageWrapper<List<Schedule>> getAllSchedules() throws CustomException {
-        List<Schedule> schedules = scheduleRepository.findAll();
-        if(schedules==null){
-            throw new CustomException(new CustomErrorResponse("10","Schedule Not Find"));
-        }
-        MessageWrapper<List<Schedule>> scheduleWrapper = new MessageWrapper<>("00","SUCCESS",schedules);
-        return scheduleWrapper;
-    }
 
     public MessageWrapper<List<AvailabilityData>> getScheduleAvail(LocalDate departdate,String orgstasiun,String deststasiun){
         List<PropertySchedule> propertySchedules = propScheduleRepository.findByTripdateAndStasiuncodeorgAndStasiuncodedesContainingIgnoreCase(departdate,orgstasiun,deststasiun);

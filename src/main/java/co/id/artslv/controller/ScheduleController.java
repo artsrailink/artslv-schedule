@@ -30,21 +30,7 @@ public class ScheduleController {
     @Autowired
     private ScheduleService scheduleService;
 
-    @Autowired
-    private InventoryRepository inventoryRepository;
 
-    @RequestMapping(value = "/getall")
-    public ResponseEntity<?> getAllSchedules(){
-        try {
-            MessageWrapper<List<Schedule>> listMessageWrapper = scheduleService.getAllSchedules();
-            return new ResponseEntity<>(listMessageWrapper, HttpStatus.OK);
-        } catch (CustomException e) {
-            CustomErrorResponse errorResponse = (CustomErrorResponse)e.getCause();
-            MessageWrapper<?> errorMessageWrapper = new MessageWrapper<>(errorResponse);
-            return new ResponseEntity<>(errorMessageWrapper,HttpStatus.OK);
-        }
-
-    }
     @RequestMapping(value = "/getschedule/{origin}/{tripdate}",method = RequestMethod.GET)
     public ResponseEntity<?> getSchedule( @PathVariable String origin,
                                          @PathVariable String tripdate){
