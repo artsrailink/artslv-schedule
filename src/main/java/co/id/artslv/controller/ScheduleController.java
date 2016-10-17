@@ -3,6 +3,8 @@ package co.id.artslv.controller;
 
 import co.id.artslv.lib.availability.AvailabilityData;
 import co.id.artslv.lib.responses.MessageWrapper;
+import co.id.artslv.lib.utility.CustomErrorResponse;
+import co.id.artslv.lib.utility.CustomException;
 import co.id.artslv.service.ScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,7 +33,14 @@ public class ScheduleController {
     public ResponseEntity<?> getSchedule( @PathVariable String origin,
                                          @PathVariable String tripdate){
         LocalDate departdate = LocalDate.parse(tripdate,dateTimeFormatter);
-        MessageWrapper<List<AvailabilityData>> availdatas = scheduleService.getScheduleAvail(departdate,origin,"");
+        MessageWrapper<List<AvailabilityData>> availdatas = null;
+        try {
+            availdatas = scheduleService.getScheduleAvail(departdate,origin,"");
+        } catch (CustomException e) {
+            CustomErrorResponse customErrorResponse = (CustomErrorResponse) e.getCause();
+            MessageWrapper<Object> error = new MessageWrapper<>(customErrorResponse);
+            return new ResponseEntity<>(error,HttpStatus.OK);
+        }
         return new ResponseEntity<>(availdatas,HttpStatus.OK);
     }
 
@@ -40,7 +49,14 @@ public class ScheduleController {
                                           @PathVariable String destination,
                                           @PathVariable String tripdate){
         LocalDate departdate = LocalDate.parse(tripdate,dateTimeFormatter);
-        MessageWrapper<List<AvailabilityData>> availdatas = scheduleService.getScheduleAvail(departdate,origin,destination);
+        MessageWrapper<List<AvailabilityData>> availdatas = null;
+        try {
+            availdatas = scheduleService.getScheduleAvail(departdate,origin,destination);
+        } catch (CustomException e) {
+            CustomErrorResponse customErrorResponse = (CustomErrorResponse) e.getCause();
+            MessageWrapper<Object> error = new MessageWrapper<>(customErrorResponse);
+            return new ResponseEntity<>(error,HttpStatus.OK);
+        }
         return new ResponseEntity<>(availdatas,HttpStatus.OK);
     }
 

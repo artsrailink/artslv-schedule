@@ -5,9 +5,13 @@ import co.id.artslv.lib.availability.AvailabilityData;
 import co.id.artslv.lib.availability.ScheduleData;
 import co.id.artslv.lib.responses.MessageWrapper;
 import co.id.artslv.lib.schedule.PropertySchedule;
+import co.id.artslv.lib.utility.CustomErrorResponse;
+import co.id.artslv.lib.utility.CustomException;
 import co.id.artslv.repository.PropScheduleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -24,9 +28,12 @@ public class ScheduleService {
     @Autowired
     private PropScheduleRepository propScheduleRepository;
 
-
-    public MessageWrapper<List<AvailabilityData>> getScheduleAvail(LocalDate departdate, String orgstasiun, String deststasiun){
+    @Transactional(rollbackFor = {CustomException.class}, propagation = Propagation.NESTED)
+    public MessageWrapper<List<AvailabilityData>> getScheduleAvail(LocalDate departdate, String orgstasiun, String deststasiun) throws CustomException {
         List<PropertySchedule> propertySchedules = propScheduleRepository.findByTripdateAndStasiuncodeorgAndStasiuncodedesContainingIgnoreCase(departdate,orgstasiun,deststasiun);
+        if(propertySchedules==null || propertySchedules.isEmpty()){
+            throw new CustomException(new CustomErrorResponse("10","No Data Found"));
+        }
 
         Set<AvailabilityData> availabilityDataSet = propertySchedules.stream().map(propertySchedule -> {
             AvailabilityData availabilityData = new AvailabilityData();
