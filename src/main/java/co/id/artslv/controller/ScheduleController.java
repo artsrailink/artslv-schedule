@@ -29,13 +29,14 @@ public class ScheduleController {
     private ScheduleService scheduleService;
 
 
-    @RequestMapping(value = "/getschedule/{origin}/{tripdate}",method = RequestMethod.GET)
-    public ResponseEntity<?> getSchedule( @PathVariable String origin,
+    @RequestMapping(value = "/getschedule/{rqid}/{origin}/{tripdate}",method = RequestMethod.GET)
+    public ResponseEntity<?> getSchedule(@PathVariable String rqid,
+                                         @PathVariable String origin,
                                          @PathVariable String tripdate){
         LocalDate departdate = LocalDate.parse(tripdate,dateTimeFormatter);
         MessageWrapper<List<AvailabilityData>> availdatas = null;
         try {
-            availdatas = scheduleService.getScheduleAvail(departdate,origin,"");
+            availdatas = scheduleService.getScheduleAvail(departdate,origin,"",rqid);
         } catch (CustomException e) {
             CustomErrorResponse customErrorResponse = (CustomErrorResponse) e.getCause();
             MessageWrapper<Object> error = new MessageWrapper<>(customErrorResponse);
@@ -44,14 +45,15 @@ public class ScheduleController {
         return new ResponseEntity<>(availdatas,HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/getschedule/{origin}/{destination}/{tripdate}",method = RequestMethod.GET)
-    public ResponseEntity<?> getSchedule( @PathVariable String origin,
+    @RequestMapping(value = "/getschedule/{rqid}/{origin}/{destination}/{tripdate}",method = RequestMethod.GET)
+    public ResponseEntity<?> getSchedule( @PathVariable String rqid,
+                                          @PathVariable String origin,
                                           @PathVariable String destination,
                                           @PathVariable String tripdate){
         LocalDate departdate = LocalDate.parse(tripdate,dateTimeFormatter);
         MessageWrapper<List<AvailabilityData>> availdatas = null;
         try {
-            availdatas = scheduleService.getScheduleAvail(departdate,origin,destination);
+            availdatas = scheduleService.getScheduleAvail(departdate,origin,destination,rqid);
         } catch (CustomException e) {
             CustomErrorResponse customErrorResponse = (CustomErrorResponse) e.getCause();
             MessageWrapper<Object> error = new MessageWrapper<>(customErrorResponse);

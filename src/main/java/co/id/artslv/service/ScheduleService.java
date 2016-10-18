@@ -5,9 +5,11 @@ import co.id.artslv.lib.availability.AvailabilityData;
 import co.id.artslv.lib.availability.ScheduleData;
 import co.id.artslv.lib.responses.MessageWrapper;
 import co.id.artslv.lib.schedule.PropertySchedule;
+import co.id.artslv.lib.users.User;
 import co.id.artslv.lib.utility.CustomErrorResponse;
 import co.id.artslv.lib.utility.CustomException;
 import co.id.artslv.repository.PropScheduleRepository;
+import co.id.artslv.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -28,13 +30,20 @@ public class ScheduleService {
     @Autowired
     private PropScheduleRepository propScheduleRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Transactional(rollbackFor = {CustomException.class}, propagation = Propagation.NESTED)
-    public MessageWrapper<List<AvailabilityData>> getScheduleAvail(LocalDate departdate, String orgstasiun, String deststasiun) throws CustomException {
+    public MessageWrapper<List<AvailabilityData>> getScheduleAvail(LocalDate departdate, String orgstasiun, String deststasiun, String rqid) throws CustomException {
         List<PropertySchedule> propertySchedules = propScheduleRepository.findByTripdateAndStasiuncodeorgAndStasiuncodedesContainingIgnoreCase(departdate,orgstasiun,deststasiun);
         if(propertySchedules==null || propertySchedules.isEmpty()){
             throw new CustomException(new CustomErrorResponse("10","No Data Found"));
         }
 
+        User user = userRepository.findByRqid(rqid);
+        if(user==null){
+            throw new CustomException(new CustomErrorResponse("01","RQID is not valid"));
+        }
         Set<AvailabilityData> availabilityDataSet = propertySchedules.stream().map(propertySchedule -> {
             AvailabilityData availabilityData = new AvailabilityData();
             availabilityData.setId(propertySchedule.getId());
