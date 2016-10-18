@@ -37,9 +37,11 @@ public class ScheduleService {
 
         Set<AvailabilityData> availabilityDataSet = propertySchedules.stream().map(propertySchedule -> {
             AvailabilityData availabilityData = new AvailabilityData();
-            availabilityData.setDepartdate(departdate);
-            availabilityData.setStationOrg(propertySchedule.getStasiuncodeorg());
-            availabilityData.setStationDest(propertySchedule.getStasiuncodedes());
+            availabilityData.setId(propertySchedule.getId());
+            availabilityData.setTripdate(departdate);
+            availabilityData.setStasiuncodeorg(propertySchedule.getStasiuncodeorg());
+            availabilityData.setStasiuncodedes(propertySchedule.getStasiuncodedes());
+            availabilityData.setStasiunnameorg(propertySchedule.getStasiunnameorg());
             return availabilityData;
         }).collect(Collectors.toSet());
         List<AvailabilityData> availabilityDatas = new ArrayList<>(availabilityDataSet);
@@ -49,20 +51,22 @@ public class ScheduleService {
         for(AvailabilityData ad : availabilityDatas){
             List<ScheduleData> sds = new ArrayList<>();
             for(String noka:nokas){
-                ScheduleData scheduleData = propertySchedules.stream().filter(ps->ps.getStasiuncodeorg().equals(ad.getStationOrg()) && ps.getStasiuncodedes().equals(ad.getStationDest()) && ps.getNoka().equals(noka)).map(ps$2->{
+                ScheduleData scheduleData = propertySchedules.stream().filter(ps->ps.getStasiuncodeorg().equals(ad.getStasiuncodeorg()) && ps.getStasiuncodedes().equals(ad.getStasiuncodedes()) && ps.getNoka().equals(noka)).map(ps$2->{
                     ScheduleData sd = new ScheduleData();
+                    sd.setId(ps$2.getScheduleid());
+                    sd.setTrainname(ps$2.getTrainname());
                     sd.setNoka(noka);
-                    sd.setJambrangkat(ps$2.getStopdeparture());
-                    sd.setJamsampai(ps$2.getStoparrival());
+                    sd.setStopdeparture(ps$2.getStopdeparture());
+                    sd.setStoparrival(ps$2.getStoparrival());
                     return sd;
                 }).findFirst().get();
                 List<AllocationData> allocationDatas = new ArrayList<>();
                 for (String sc:subclass){
-                    AllocationData alocData = propertySchedules.stream().filter(ps->ps.getStasiuncodeorg().equals(ad.getStationOrg()) && ps.getStasiuncodedes().equals(ad.getStationDest()) && ps.getNoka().equals(noka) && ps.getSubclasscode().equals(sc)).map(ps$2->{
+                    AllocationData alocData = propertySchedules.stream().filter(ps->ps.getStasiuncodeorg().equals(ad.getStasiuncodeorg()) && ps.getStasiuncodedes().equals(ad.getStasiuncodedes()) && ps.getNoka().equals(noka) && ps.getSubclasscode().equals(sc)).map(ps$2->{
                         AllocationData ald = new AllocationData();
-                        ald.setSubclass(sc);
-                        ald.setSisakursi(ps$2.getSeatavailable());
-                        ald.setFare(ps$2.getTotamount());
+                        ald.setSubclasscode(sc);
+                        ald.setSeatavailable(ps$2.getSeatavailable());
+                        ald.setFaretotamount(ps$2.getFaretotamount());
                         return ald;
                     }).findFirst().get();
 
