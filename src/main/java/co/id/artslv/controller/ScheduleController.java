@@ -29,7 +29,7 @@ public class ScheduleController {
     private ScheduleService scheduleService;
 
 
-    @RequestMapping(value = "/getschedule/{rqid}/{origin}/{tripdate}",method = RequestMethod.GET)
+    @RequestMapping(value = "/arts_getschedule/{rqid}/{origin}/{tripdate}",method = RequestMethod.GET)
     public ResponseEntity<?> getSchedule(@PathVariable String rqid,
                                          @PathVariable String origin,
                                          @PathVariable String tripdate){
@@ -45,7 +45,7 @@ public class ScheduleController {
         return new ResponseEntity<>(availdatas,HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/getschedule/{rqid}/{origin}/{destination}/{tripdate}",method = RequestMethod.GET)
+    @RequestMapping(value = "/arts_getschedule/{rqid}/{origin}/{destination}/{tripdate}",method = RequestMethod.GET)
     public ResponseEntity<?> getSchedule( @PathVariable String rqid,
                                           @PathVariable String origin,
                                           @PathVariable String destination,
