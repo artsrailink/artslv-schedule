@@ -46,7 +46,6 @@ public class ScheduleService {
         }
         Set<AvailabilityData> availabilityDataSet = propertySchedules.stream().map(propertySchedule -> {
             AvailabilityData availabilityData = new AvailabilityData();
-            availabilityData.setId(propertySchedule.getId());
             availabilityData.setTripdate(departdate);
             availabilityData.setStasiuncodeorg(propertySchedule.getStasiuncodeorg());
             availabilityData.setStasiuncodedes(propertySchedule.getStasiuncodedes());
@@ -73,6 +72,7 @@ public class ScheduleService {
                 for (String sc:subclass){
                     AllocationData alocData = propertySchedules.stream().filter(ps->ps.getStasiuncodeorg().equals(ad.getStasiuncodeorg()) && ps.getStasiuncodedes().equals(ad.getStasiuncodedes()) && ps.getNoka().equals(noka) && ps.getSubclasscode().equals(sc)).map(ps$2->{
                         AllocationData ald = new AllocationData();
+                        ald.setId(ps$2.getId());
                         ald.setSubclasscode(sc);
                         ald.setSeatavailable(ps$2.getSeatavailable());
                         ald.setFaretotamount(ps$2.getFaretotamount());
