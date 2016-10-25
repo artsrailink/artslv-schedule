@@ -50,6 +50,7 @@ public class ScheduleService {
             availabilityData.setStasiuncodeorg(propertySchedule.getStasiuncodeorg());
             availabilityData.setStasiuncodedes(propertySchedule.getStasiuncodedes());
             availabilityData.setStasiunnameorg(propertySchedule.getStasiunnameorg());
+            availabilityData.setStasiunnamedes(propertySchedule.getStasiunnamedes());
             return availabilityData;
         }).collect(Collectors.toSet());
         List<AvailabilityData> availabilityDatas = new ArrayList<>(availabilityDataSet);
