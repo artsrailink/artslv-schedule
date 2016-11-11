@@ -25,8 +25,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://artsdev.clpcb7xlzus1.us-east-1.rds.amazonaws.com/ARTSDEV
-    username: ARTSDEV
-    password: ARTSDEVGP
+    username: *******
+    password: *******
 
 
 
